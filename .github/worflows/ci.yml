@@ -1,27 +1,24 @@
 name: CI
 on: [push]
 jobs:
-  build-test:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    build-test:
+        runs-on: ubuntu-20.04
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: npm install
+          - name: Cypress Tests
+            uses: cypress-io/github-action@v5
+            with:
+              start: 'npm run dev'
+              build: 'npm run build'
 
-      - name: Cypress Tests
-        uses: cypress-io/github-action@v5
-        with:
-          start: 'npm run dev'
-          build: npm run build
-          
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: Cypress Results
-          path: |
-              cypress/screenshots
-              cypress/videos
-              cypress/Results
-          if-no-files-found: ignore
+          - uses: actions/upload-artifact@v3
+            if: always()
+            with:
+              name: Cypress Result
+              path: |
+                  cypress/screenshots
+                  cypress/videos
+                  cypress/Results
+              if-no-files-found: ignore
